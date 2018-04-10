@@ -1,0 +1,7 @@
+site_name: 'OpinHelpers'
+pages:
+    - 'OpinHelpers Documentation': 'index.md'
+    - 'Math': 'math.md'
+    - 'Utf8': 'utf8.md'
+    - 'strings': 'strings.md'
+    - 'Bom': 'bom.md'

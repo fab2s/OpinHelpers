@@ -12,13 +12,6 @@ OpinHelpers can be installed using composer :
 composer require "fab2s/opinhelpers"
 ```
 
-## Citizens
-
-- [Math](docs/math.md): Arbitrary precision fluent helper with a rather strict approach
-- [Utf8](docs/utf8.md): Purely static UTF8 Helper
-- [Strings](docs/strings.md): Purely static String Helper to handle more advanced utf8 string manipulations
-- [Bom](docs/bom.md): Purely static zero dependencies BOM Helper to handle unicode BOMs
-
 ## Requirements
 
 OpinHelpers is tested against php 5.6, 7.0, 7.1, 7.2 and hhvm.
