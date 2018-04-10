@@ -10,9 +10,9 @@
 namespace fab2s\Math\OpinHelpers;
 
 /**
- * Abstract class MathAbstract
+ * Abstract class MathBaseAbstract
  */
-abstract class MathAbstract
+abstract class MathBaseAbstract
 {
     /**
      * Default precision
@@ -101,14 +101,6 @@ abstract class MathAbstract
     }
 
     /**
-     * @return string
-     */
-    public function getNumber()
-    {
-        return $this->number;
-    }
-
-    /**
      * @param string $number
      *
      * @throws \InvalidArgumentException
@@ -118,43 +110,6 @@ abstract class MathAbstract
     public static function number($number)
     {
         return new static($number);
-    }
-
-    /**
-     * @param int $precision
-     */
-    public static function setGlobalPrecision($precision)
-    {
-        // even INT_32 should be enough precision
-        static::$globalPrecision = max(0, (int) $precision);
-        static::$staticPrecision = static::$globalPrecision;
-    }
-
-    /**
-     * @param int $precision
-     *
-     * @return $this
-     */
-    public function setPrecision($precision)
-    {
-        // even INT_32 should be enough precision
-        $this->precision = max(0, (int) $precision);
-
-        return $this;
-    }
-
-    /**
-     * @param bool $disable
-     *
-     * @return bool
-     */
-    public static function gmpSupport($disable = false)
-    {
-        if ($disable) {
-            return static::$gmpSupport = false;
-        }
-
-        return static::$gmpSupport = function_exists('gmp_init');
     }
 
     /**
@@ -169,39 +124,8 @@ abstract class MathAbstract
      */
     public static function fromBase($number, $base)
     {
-        // cleanup
-        $number   = trim($number);
         $baseChar = static::getBaseChar($base);
-        // Convert string to lower case since base36 or less is case insensitive
-        if ($base < 37) {
-            $number = strtolower($number);
-        }
-
-        // clean up the input string if it uses particular input formats
-        switch ($base) {
-            case 16:
-                // remove 0x from start of string
-                if (substr($number, 0, 2) === '0x') {
-                    $number = substr($number, 2);
-                }
-                break;
-            case 8:
-                // remove the 0 from the start if it exists - not really required
-                if ($number[0] === 0) {
-                    $number = substr($number, 1);
-                }
-                break;
-            case 2:
-                // remove an 0b from the start if it exists
-                if (substr($number, 0, 2) === '0b') {
-                    $number = substr($number, 2);
-                }
-                break;
-            case 64:
-                // remove padding chars: =
-                $number = rtrim($number, '=');
-                break;
-        }
+        $number   = static::cleanBaseInteger(trim($number), $base);
 
         // only support positive integers
         $number = ltrim($number, '-');
@@ -236,6 +160,14 @@ abstract class MathAbstract
     }
 
     /**
+     * @return string
+     */
+    public function getNumber()
+    {
+        return $this->number;
+    }
+
+    /**
      * @return bool
      */
     public function isPositive()
@@ -259,6 +191,43 @@ abstract class MathAbstract
         $this->number = static::normalizeNumber($this->number);
 
         return $this;
+    }
+
+    /**
+     * @param int $precision
+     *
+     * @return $this
+     */
+    public function setPrecision($precision)
+    {
+        // even INT_32 should be enough precision
+        $this->precision = max(0, (int) $precision);
+
+        return $this;
+    }
+
+    /**
+     * @param int $precision
+     */
+    public static function setGlobalPrecision($precision)
+    {
+        // even INT_32 should be enough precision
+        static::$globalPrecision = max(0, (int) $precision);
+        static::$staticPrecision = static::$globalPrecision;
+    }
+
+    /**
+     * @param bool $disable
+     *
+     * @return bool
+     */
+    public static function gmpSupport($disable = false)
+    {
+        if ($disable) {
+            return static::$gmpSupport = false;
+        }
+
+        return static::$gmpSupport = function_exists('gmp_init');
     }
 
     /**
@@ -328,6 +297,65 @@ abstract class MathAbstract
         }
 
         return static::$baseChars[$base];
+    }
+
+    /**
+     * @param string     $integer
+     * @param string|int $base
+     *
+     * @return string
+     */
+    public static function cleanBaseInteger($integer, $base)
+    {
+        if ($base < 37) {
+            $integer = strtolower($integer);
+        }
+
+        // clean up the input string if it uses particular input formats
+        switch ($base) {
+            case 16:
+                // remove 0x from start of string
+                if (substr($integer, 0, 2) === '0x') {
+                    $integer = substr($integer, 2);
+                }
+                break;
+            case 8:
+                // remove the 0 from the start if it exists - not really required
+                if ($integer[0] === 0) {
+                    $integer = substr($integer, 1);
+                }
+                break;
+            case 2:
+                // remove an 0b from the start if it exists
+                if (substr($integer, 0, 2) === '0b') {
+                    $integer = substr($integer, 2);
+                }
+                break;
+            case 64:
+                // remove padding chars: =
+                $integer = rtrim($integer, '=');
+                break;
+        }
+
+        return $integer;
+    }
+
+    /**
+     * Convert a from a given base (up to 62) to base 10.
+     *
+     * WARNING This method requires ext-gmp
+     *
+     * @param string $number
+     * @param int    $fromBase
+     * @param int    $toBase
+     *
+     * @return string
+     *
+     * @internal param int $base
+     */
+    public static function baseConvert($number, $fromBase = 10, $toBase = 62)
+    {
+        return gmp_strval(gmp_init($number, $fromBase), $toBase);
     }
 
     /**

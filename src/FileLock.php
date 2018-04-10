@@ -100,7 +100,7 @@ class FileLock
         }
 
         $mode             = is_file($this->lockFile) ? 'rb' : 'wb';
-        $this->lockHandle = fopen($this->lockFile, $mode);
+        $this->lockHandle = fopen($this->lockFile, $mode) ?: null;
         if ($mode == 'wb') {
             if (!$this->lockHandle) {
                 // in case another process won the race

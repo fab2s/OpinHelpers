@@ -163,16 +163,12 @@ class Utf8
         switch (strlen($chr)) {
             case 1:
                 return ord($chr);
-            break;
             case 2:
                 return ((ord($chr[0]) & 0x1F) << 6) | (ord($chr[1]) & 0x3F);
-            break;
             case 3:
                 return ((ord($chr[0]) & 0x0F) << 12) | ((ord($chr[1]) & 0x3F) << 6) | (ord($chr[2]) & 0x3F);
-            break;
             case 4:
                 return ((ord($chr[0]) & 0x07) << 18) | ((ord($chr[1]) & 0x3F) << 12) | ((ord($chr[2]) & 0x3F) << 6) | (ord($chr[3]) & 0x3F);
-            break;
             default:
                 // should just never happen
                 return null;
