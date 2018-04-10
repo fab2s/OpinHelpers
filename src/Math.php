@@ -17,6 +17,73 @@ use fab2s\Math\OpinHelpers\MathOpsAbstract;
 class Math extends MathOpsAbstract
 {
     /**
+     * Math constructor.
+     *
+     * @param string|static $number
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function __construct($number)
+    {
+        if (isset(static::$globalPrecision)) {
+            $this->precision = static::$globalPrecision;
+        }
+
+        $this->number = static::validateInputNumber($number);
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return static::normalizeNumber($this->number);
+    }
+
+    /**
+     * @param string $number
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return static
+     */
+    public static function number($number)
+    {
+        return new static($number);
+    }
+
+    /**
+     * convert any based value bellow or equals to 64 to its decimal value
+     *
+     * @param string $number
+     * @param int    $base
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return static
+     */
+    public static function fromBase($number, $base)
+    {
+        // trim base 64 padding char, only positive
+        $number = trim($number, ' =-');
+        if ($number === '' || strpos($number, '.') !== false) {
+            throw new \InvalidArgumentException('Argument number is not an integer');
+        }
+
+        $baseChar = static::getBaseChar($base);
+        if (trim($number, $baseChar[0]) === '') {
+            return new static('0');
+        }
+
+        if (static::$gmpSupport && $base <= 62) {
+            return new static(static::baseConvert($number, $base, 10));
+        }
+
+        // By now we know we have a correct base and number
+        return new static(static::bcDec2Base($number, $base, $baseChar));
+    }
+
+    /**
      * @param string $number
      *
      * @throws \InvalidArgumentException
@@ -74,46 +141,6 @@ class Math extends MathOpsAbstract
     public function eq($number)
     {
         return (bool) (bccomp($this->number, static::validateInputNumber($number), $this->precision) === 0);
-    }
-
-    /**
-     * returns the highest number among all arguments
-     *
-     * @param string[] $numbers
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return $this
-     */
-    public function max(...$numbers)
-    {
-        foreach ($numbers as $number) {
-            if (bccomp(static::validateInputNumber($number), $this->number, $this->precision) === 1) {
-                $this->number = $number;
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * returns the smallest number among all arguments
-     *
-     * @param string[] $numbers
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return $this
-     */
-    public function min(...$numbers)
-    {
-        foreach ($numbers as $number) {
-            if (bccomp(static::validateInputNumber($number), $this->number, $this->precision) === -1) {
-                $this->number = $number;
-            }
-        }
-
-        return $this;
     }
 
     /**

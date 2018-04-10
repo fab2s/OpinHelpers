@@ -197,4 +197,44 @@ abstract class MathOpsAbstract extends MathBaseAbstract
 
         return $this;
     }
+
+    /**
+     * returns the highest number among all arguments
+     *
+     * @param string[] $numbers
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return $this
+     */
+    public function max(...$numbers)
+    {
+        foreach ($numbers as $number) {
+            if (bccomp(static::validateInputNumber($number), $this->number, $this->precision) === 1) {
+                $this->number = $number;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * returns the smallest number among all arguments
+     *
+     * @param string[] $numbers
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return $this
+     */
+    public function min(...$numbers)
+    {
+        foreach ($numbers as $number) {
+            if (bccomp(static::validateInputNumber($number), $this->number, $this->precision) === -1) {
+                $this->number = $number;
+            }
+        }
+
+        return $this;
+    }
 }
