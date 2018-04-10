@@ -713,7 +713,7 @@ class Math
     }
 
     /**
-     * @param int $integer
+     * @param int|string $integer
      *
      * @throws \InvalidArgumentException
      *
