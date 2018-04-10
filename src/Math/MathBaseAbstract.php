@@ -124,15 +124,13 @@ abstract class MathBaseAbstract
      */
     public static function fromBase($number, $base)
     {
-        $baseChar = static::getBaseChar($base);
-        $number   = static::cleanBaseInteger(trim($number), $base);
-
-        // only support positive integers
-        $number = ltrim($number, '-');
+        // trim base 64 padding char, only positive
+        $number = trim($number, ' =-');
         if ($number === '' || strpos($number, '.') !== false) {
             throw new \InvalidArgumentException('Argument number is not an integer');
         }
 
+        $baseChar = static::getBaseChar($base);
         if (trim($number, $baseChar[0]) === '') {
             return new static('0');
         }
@@ -142,21 +140,7 @@ abstract class MathBaseAbstract
         }
 
         // By now we know we have a correct base and number
-        $result    = '';
-        $numberLen = strlen($number);
-        // Now loop through each digit in the number
-        for ($i = $numberLen - 1; $i >= 0; --$i) {
-            $char = $number[$i]; // extract the last char from the number
-            $ord  = strpos($baseChar, $char); // get the decimal value
-            if ($ord === false || $ord > $base) {
-                throw new \InvalidArgumentException('Argument number is invalid');
-            }
-
-            // Now convert the value+position to decimal
-            $result = bcadd($result, bcmul($ord, bcpow($base, ($numberLen - $i - 1))));
-        }
-
-        return new static($result ? $result : '0');
+        return new static(static::bcDec2Base($number, $base, $baseChar));
     }
 
     /**
@@ -300,47 +284,6 @@ abstract class MathBaseAbstract
     }
 
     /**
-     * @param string     $integer
-     * @param string|int $base
-     *
-     * @return string
-     */
-    public static function cleanBaseInteger($integer, $base)
-    {
-        if ($base < 37) {
-            $integer = strtolower($integer);
-        }
-
-        // clean up the input string if it uses particular input formats
-        switch ($base) {
-            case 16:
-                // remove 0x from start of string
-                if (substr($integer, 0, 2) === '0x') {
-                    $integer = substr($integer, 2);
-                }
-                break;
-            case 8:
-                // remove the 0 from the start if it exists - not really required
-                if ($integer[0] === 0) {
-                    $integer = substr($integer, 1);
-                }
-                break;
-            case 2:
-                // remove an 0b from the start if it exists
-                if (substr($integer, 0, 2) === '0b') {
-                    $integer = substr($integer, 2);
-                }
-                break;
-            case 64:
-                // remove padding chars: =
-                $integer = rtrim($integer, '=');
-                break;
-        }
-
-        return $integer;
-    }
-
-    /**
      * Convert a from a given base (up to 62) to base 10.
      *
      * WARNING This method requires ext-gmp
@@ -356,6 +299,32 @@ abstract class MathBaseAbstract
     public static function baseConvert($number, $fromBase = 10, $toBase = 62)
     {
         return gmp_strval(gmp_init($number, $fromBase), $toBase);
+    }
+
+    /**
+     * @param string     $number
+     * @param string|int $base
+     * @param string     $baseChar
+     *
+     * @return string
+     */
+    protected static function bcDec2Base($number, $base, $baseChar)
+    {
+        $result    = '';
+        $numberLen = strlen($number);
+        // Now loop through each digit in the number
+        for ($i = $numberLen - 1; $i >= 0; --$i) {
+            $char = $number[$i]; // extract the last char from the number
+            $ord  = strpos($baseChar, $char); // get the decimal value
+            if ($ord === false || $ord > $base) {
+                throw new \InvalidArgumentException('Argument number is invalid');
+            }
+
+            // Now convert the value+position to decimal
+            $result = bcadd($result, bcmul($ord, bcpow($base, ($numberLen - $i - 1))));
+        }
+
+        return $result ? $result : '0';
     }
 
     /**
