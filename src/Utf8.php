@@ -96,7 +96,7 @@ class Utf8
      *
      * @param string   $str
      * @param int      $offset
-     * @param int[null $length
+     * @param int|null $length
      *
      * @return string
      */
@@ -129,13 +129,10 @@ class Utf8
         switch (static::strlen($str)) {
             case 0:
                 return '';
-            break;
             case 1:
                 return static::strtoupper($str);
-            break;
             default:
                 return static::strtoupper(static::substr($str, 0, 1)) . static::substr($str, 1);
-            break;
         }
     }
 

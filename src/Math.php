@@ -587,7 +587,7 @@ class Math
      * @param int    $fromBase
      * @param int    $toBase
      *
-     * @return int
+     * @return string
      *
      * @internal param int $base
      */
@@ -633,7 +633,7 @@ class Math
      */
     public static function isNumber($number)
     {
-        return preg_match('`^([+-]{1})?([0-9]+(\.[0-9]+)?|\.[0-9]+)$`', $number);
+        return (bool) preg_match('`^([+-]{1})?([0-9]+(\.[0-9]+)?|\.[0-9]+)$`', $number);
     }
 
     /**
@@ -715,7 +715,9 @@ class Math
     /**
      * @param int $integer
      *
-     * @return mixed
+     * @throws \InvalidArgumentException
+     *
+     * @return string
      */
     protected static function validatePositiveInteger($integer)
     {
@@ -724,7 +726,7 @@ class Math
             throw new \InvalidArgumentException('Argument number is not valid');
         }
 
-        return $integer;
+        return (string) $integer;
     }
 }
 

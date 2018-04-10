@@ -187,7 +187,7 @@ class Strings
      */
     public static function normalizeName($name)
     {
-        return static::ucwords(static::normalizeTitle($name));
+        return Utf8::ucwords(static::normalizeTitle($name));
     }
 
     /**

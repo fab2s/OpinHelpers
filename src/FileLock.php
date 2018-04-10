@@ -77,7 +77,7 @@ class FileLock
     public function obtainLock()
     {
         $tries = 0;
-        $uWait = $this->lockWait * 1000000;
+        $uWait = (int) ($this->lockWait * 1000000);
         do {
             if ($this->setLock()) {
                 return true;
@@ -105,7 +105,7 @@ class FileLock
             if (!$this->lockHandle) {
                 // in case another process won the race
                 $mode             = 'rb';
-                $this->lockHandle = fopen($this->lockFile, $mode);
+                $this->lockHandle = fopen($this->lockFile, $mode) ?: null;
             }
         }
 
