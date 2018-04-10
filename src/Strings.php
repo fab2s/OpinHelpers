@@ -283,7 +283,7 @@ class Strings
             // use $reference as reference for actual constant time
             $comparison = $reference ^ $reference;
             // this make sure the result will be false
-            $result  = 1;
+            $result = 1;
         } else {
             $comparison = $userInput ^ $reference;
             $result     = 0;
