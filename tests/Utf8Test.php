@@ -108,6 +108,8 @@ class Utf8Test extends \PHPUnit_Framework_TestCase
                 'offset'   => 10,
                 'expected' => 34,
             ],
+            /*
+             * Negative offsets seems to only be supported for php >= 7.1
             [
                 'haystack' => 'this 😘 is a € test worth much €!! 😘 ohoh',
                 'needle'   => '😘',
@@ -120,6 +122,7 @@ class Utf8Test extends \PHPUnit_Framework_TestCase
                 'offset'   => -10,
                 'expected' => 34,
             ],
+            */
             [
                 'haystack' => '',
                 'needle'   => 'µ',
