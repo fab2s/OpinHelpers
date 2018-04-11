@@ -29,6 +29,8 @@ class MathTest extends \PHPUnit_Framework_TestCase
             ['255173029255255255.98797', '255 173 029 255 255 255.988', 3],
             ['-255173029255255255.98797', '-255 173 029 255 255 255.988', 3],
             ['-255173029255255255.98797', '-255 173 029 255 255 255.98797000', 8],
+            ['-255173029255255255.98797', '-255 173 029 255 255 255,98797000', 8, ','],
+            ['-255173029255255255.98797', '-255,173,029,255,255,255.98797000', 8, '.', ','],
             ['0.000000001', '0.00000000', 8],
             ['0.000000001', '0.000000001', 9],
             ['-0', '0.00000000', 8],
@@ -82,6 +84,18 @@ class MathTest extends \PHPUnit_Framework_TestCase
                 'expected' => true,
             ],
             [
+                'left'     => '255173029255255255.' . str_repeat('0', Math::PRECISION + 1) . '1',
+                'operator' => '>',
+                'right'    => '255173029255255255.00',
+                'expected' => false,
+            ],
+            [
+                'left'     => '255173029255255255.' . str_repeat('0', Math::PRECISION - 1) . '2',
+                'operator' => '>',
+                'right'    => '255173029255255255.00' . str_repeat('0', Math::PRECISION - 1) . '1',
+                'expected' => true,
+            ],
+            [
                 'left'    => '54',
                 'operator'=> '<=',
                 'right'   => '0',
@@ -118,9 +132,9 @@ class MathTest extends \PHPUnit_Framework_TestCase
                 'expected' => false,
             ],
             [
-                'left'     => '0',
+                'left'     => '+0',
                 'operator' => '>',
-                'right'    => '0',
+                'right'    => '-0',
                 'expected' => false,
             ],
             [
@@ -145,6 +159,12 @@ class MathTest extends \PHPUnit_Framework_TestCase
                 'left'     => '0000042.420000',
                 'operator' => '!=',
                 'right'    => '42.42',
+                'expected' => false,
+            ],
+            [
+                'left'     => '-42.420000',
+                'operator' => '!=',
+                'right'    => Math::number('-00042.4200'),
                 'expected' => false,
             ],
         ];
@@ -189,6 +209,12 @@ class MathTest extends \PHPUnit_Framework_TestCase
                 $this->assertSame(
                     $expected,
                     Math::number($left)->eq($right)
+                );
+                break;
+            case '!=':
+                $this->assertSame(
+                    $expected,
+                    !Math::number($left)->eq($right)
                 );
                 break;
         }
@@ -545,6 +571,181 @@ class MathTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @dataProvider mulDivData
+     *
+     * @param string $left
+     * @param string $right
+     * @param string $expected
+     */
+    public function testMulDiv($left, $right, $expected)
+    {
+        $result = Math::number($left)->mul($right);
+        $this->assertSame(
+            $expected,
+            (string) $result
+        );
+
+        $this->assertSame(
+            $left,
+            (string) $result->div($right)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function mulDivData()
+    {
+        return [
+            [
+                'left'     => '2',
+                'right'    => '21',
+                'expected' => '42',
+            ],
+            [
+                'left'     => '0',
+                'right'    => '42',
+                'expected' => '0',
+            ],
+            [
+                'left'     => '-546.2255',
+                'right'    => '42',
+                'expected' => '-22941.471',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider sqrtData
+     *
+     * @param string $number
+     * @param string $expected
+     */
+    public function testSqrt($number, $expected)
+    {
+        $result = Math::number($number)->sqrt();
+        $this->assertSame(
+            $expected,
+            (string) $result
+        );
+
+        $this->assertSame(
+            $number,
+            (string) $result->pow(2)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function sqrtData()
+    {
+        $result = [
+            [
+            'number'   => '64',
+            'expected' => '8',
+        ],
+            [
+                'number'   => '9.8596',
+                'expected' => '3.14',
+            ],
+        ];
+
+        for ($i = 1; $i < 50; ++$i) {
+            $number   = mt_rand(1, 10000) . '.' . mt_rand(0, 10000);
+            $result[] = [
+                'number'   => (string) Math::number($number)->pow(2),
+                'expected' => (string) Math::number($number),
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
+     * @dataProvider modData
+     *
+     * @param string $number
+     * @param string $mod
+     * @param string $expected
+     */
+    public function testMod($number, $mod, $expected)
+    {
+        $this->assertSame(
+            $expected,
+            (string) Math::number($number)->mod($mod)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function modData()
+    {
+        $result = [
+            [
+                'number'   => '64',
+                'mod'      => '8',
+                'expected' => '0',
+            ],
+            [
+                'number'   => '42',
+                'mod'      => '7',
+                'expected' => '0',
+            ],
+            [
+                'number'   => '42',
+                'mod'      => '4',
+                'expected' => '2',
+            ],
+        ];
+
+        for ($i = 1; $i < 50; ++$i) {
+            $number   = mt_rand(1, 10000);
+            $mod      = mt_rand(1, 100);
+            $result[] = [
+                'number'   => (string) Math::number($number),
+                'mod'      => (string) $mod,
+                'expected' => (string) ($number % $mod),
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
+     * @dataProvider powModData
+     *
+     * @param string $number
+     * @param string $pow
+     * @param string $mod
+     */
+    public function testPowMod($number, $pow, $mod)
+    {
+        $this->assertSame(
+            (string) Math::number($number)->powMod($pow, $mod),
+            (string) Math::number($number)->pow($pow)->mod($mod)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function powModData()
+    {
+        $result = [];
+        for ($i = 1; $i < 50; ++$i) {
+            $result[] = [
+                'number' => (string) mt_rand(1, 100000),
+                'pow'    => (string) mt_rand(1, 1000),
+                'mod'    => (string) mt_rand(1, 1000),
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
      * @dataProvider ceilData
      *
      * @param string $number
@@ -679,8 +880,87 @@ class MathTest extends \PHPUnit_Framework_TestCase
                 'expected' => '42',
             ],
             [
-                'number'   => '42',
+                'number'   => '+42',
                 'expected' => '42',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider isNumberData
+     *
+     * @param string $number
+     * @param string $expected
+     */
+    public function testIsNumber($number, $expected)
+    {
+        $this->assertSame(
+            $expected,
+            Math::isNumber($number)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function isNumberData()
+    {
+        return [
+            [
+                'number'   => '-42',
+                'expected' => true,
+            ],
+            [
+                'number'   => '',
+                'expected' => false,
+            ],
+            [
+                'number'   => '+42',
+                'expected' => true,
+            ],
+            [
+                'number'   => '+00004200000',
+                'expected' => true,
+            ],
+            [
+                'number'   => '-000042000.00',
+                'expected' => true,
+            ],
+            [
+                'number'   => '-000042000.',
+                'expected' => false,
+            ],
+            [
+                'number'   => '000.042000.',
+                'expected' => false,
+            ],
+            [
+                'number'   => '.042000.',
+                'expected' => false,
+            ],
+            [
+                'number'   => '42e64',
+                'expected' => false,
+            ],
+            [
+                'number'   => ' 42',
+                'expected' => false,
+            ],
+            [
+                'number'   => '4 2',
+                'expected' => false,
+            ],
+            [
+                'number'   => '42 ',
+                'expected' => false,
+            ],
+            [
+                'number'   => '000',
+                'expected' => true,
+            ],
+            [
+                'number'   => '.000',
+                'expected' => true,
             ],
         ];
     }

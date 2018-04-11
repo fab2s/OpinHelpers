@@ -72,31 +72,31 @@ class FileLock
     /**
      * obtain a lock with retries
      *
-     * @return bool
+     * @return $this
      */
     public function obtainLock()
     {
         $tries = 0;
         $uWait = (int) ($this->lockWait * 1000000);
         do {
-            if ($this->setLock()) {
-                return true;
+            if ($this->setLock()->isLocked()) {
+                return $this;
             }
 
             ++$tries;
             usleep($uWait);
         } while ($tries < $this->maxTry);
 
-        return false;
+        return $this;
     }
 
     /**
-     * @return bool
+     * @return $this
      */
     public function setLock()
     {
         if ($this->lockAcquired) {
-            return true;
+            return $this;
         }
 
         $mode             = is_file($this->lockFile) ? 'rb' : 'wb';
@@ -109,7 +109,9 @@ class FileLock
             }
         }
 
-        return $this->lockAcquired = $this->lockHandle ? flock($this->lockHandle, LOCK_EX | LOCK_NB) : false;
+        $this->lockAcquired = $this->lockHandle ? flock($this->lockHandle, LOCK_EX | LOCK_NB) : false;
+
+        return $this;
     }
 
     /**

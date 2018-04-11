@@ -37,113 +37,113 @@ class Utf8
     /**
      * strrpos
      *
-     * @param string $str
+     * @param string $haystack
      * @param string $needle
      * @param int    $offset
      *
      * @return int|false
      */
-    public static function strrpos($str, $needle, $offset = null)
+    public static function strrpos($haystack, $needle, $offset = null)
     {
         // Emulate strrpos behaviour (no warning)
-        if (empty($str)) {
+        if (empty($haystack)) {
             return false;
         }
 
-        return mb_strrpos($str, $needle, (int) $offset, static::ENC_UTF8);
+        return mb_strrpos($haystack, $needle, (int) $offset, static::ENC_UTF8);
     }
 
     /**
      * strpos
      *
-     * @param string $str
-     * @param string $needle
-     * @param int    $offset
+     * @param string   $haystack
+     * @param string   $needle
+     * @param int|null $offset
      *
      * @return int|false
      */
-    public static function strpos($str, $needle, $offset = 0)
+    public static function strpos($haystack, $needle, $offset = null)
     {
-        return mb_strpos($str, $needle, $offset, static::ENC_UTF8);
+        return mb_strpos($haystack, $needle, (int) $offset, static::ENC_UTF8);
     }
 
     /**
      * strtolower
      *
-     * @param string $str
+     * @param string $string
      *
      * @return string
      */
-    public static function strtolower($str)
+    public static function strtolower($string)
     {
-        return mb_strtolower($str, static::ENC_UTF8);
+        return mb_strtolower($string, static::ENC_UTF8);
     }
 
     /**
      * strtoupper
      *
-     * @param string $str
+     * @param string $string
      *
      * @return string
      */
-    public static function strtoupper($str)
+    public static function strtoupper($string)
     {
-        return mb_strtoupper($str, static::ENC_UTF8);
+        return mb_strtoupper($string, static::ENC_UTF8);
     }
 
     /**
      * substr
      *
-     * @param string   $str
+     * @param string   $string
      * @param int      $offset
      * @param int|null $length
      *
      * @return string
      */
-    public static function substr($str, $offset, $length = null)
+    public static function substr($string, $offset, $length = null)
     {
-        return mb_substr($str, $offset, $length === null ? mb_strlen($str, static::ENC_UTF8) : $length, static::ENC_UTF8);
+        return mb_substr($string, $offset, $length === null ? mb_strlen($string, static::ENC_UTF8) : $length, static::ENC_UTF8);
     }
 
     /**
      * strlen
      *
-     * @param string $str
+     * @param string $string
      *
      * @return int
      */
-    public static function strlen($str)
+    public static function strlen($string)
     {
-        return mb_strlen($str, static::ENC_UTF8);
+        return mb_strlen($string, static::ENC_UTF8);
     }
 
     /**
      * ucfirst
      *
-     * @param string $str
+     * @param string $string
      *
      * @return string
      */
-    public static function ucfirst($str)
+    public static function ucfirst($string)
     {
-        switch (static::strlen($str)) {
+        switch (static::strlen($string)) {
             case 0:
                 return '';
             case 1:
-                return static::strtoupper($str);
+                return static::strtoupper($string);
             default:
-                return static::strtoupper(static::substr($str, 0, 1)) . static::substr($str, 1);
+                return static::strtoupper(static::substr($string, 0, 1)) . static::substr($string, 1);
         }
     }
 
     /**
-     * @param string $str
+     * @param string $string
      *
      * @return string
      */
-    public static function ucwords($str)
+    public static function ucwords($string)
     {
-        return mb_convert_case($str, MB_CASE_TITLE, static::ENC_UTF8);
+        return mb_convert_case($string, MB_CASE_TITLE, static::ENC_UTF8);
     }
 
     /**
@@ -169,6 +169,8 @@ class Utf8
                 return ((ord($chr[0]) & 0x0F) << 12) | ((ord($chr[1]) & 0x3F) << 6) | (ord($chr[2]) & 0x3F);
             case 4:
                 return ((ord($chr[0]) & 0x07) << 18) | ((ord($chr[1]) & 0x3F) << 12) | ((ord($chr[2]) & 0x3F) << 6) | (ord($chr[3]) & 0x3F);
+            case 0:
+                return 0;
             default:
                 // should just never happen
                 return null;
