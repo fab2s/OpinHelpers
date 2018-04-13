@@ -15,6 +15,21 @@ namespace fab2s\OpinHelpers;
 class FileLock
 {
     /**
+     * external lock type actually locks "inputFile.lock"
+     */
+    const LOCK_EXTERNAL = 'external';
+
+    /**
+     * lock the file itself
+     */
+    const LOCK_SELF = 'self';
+
+    /**
+     * @var string
+     */
+    protected $lockMethod = self::LOCK_EXTERNAL;
+
+    /**
      * max number of lock attempt
      *
      * @var int
@@ -39,18 +54,39 @@ class FileLock
     protected $lockHandle;
 
     /**
+     * @var string fopen mode
+     */
+    protected $lockMode;
+
+    /**
      * @var bool
      */
     protected $lockAcquired = false;
 
     /**
-     * FsLock constructor.
+     * FileLock constructor.
      *
-     * @param string $lockFile
+     * @param string|resource $file
+     * @param string          $lockMethod
+     * @param string          $mode
      */
-    public function __construct($lockFile)
+    public function __construct($file, $lockMethod, $mode = 'wb')
     {
-        $this->lockFile = $lockFile . '.lock';
+        $fileDir = dirname($file);
+        if (!($fileDir = realpath($fileDir))) {
+            throw new \InvalidArgumentException('File path not valid');
+        }
+
+        if ($lockMethod === self::LOCK_SELF) {
+            $this->lockMethod = self::LOCK_SELF;
+            $this->lockMode   = $mode;
+            $this->lockFile   = $fileDir . '/' . basename($file);
+
+            return;
+        }
+
+        $fileDir        = is_writeable($fileDir) ? $fileDir . '/' : sys_get_temp_dir() . '/' . sha1($fileDir) . '_';
+        $this->lockFile = $fileDir . basename($file) . '.lock';
     }
 
     /**
@@ -59,6 +95,22 @@ class FileLock
     public function __destruct()
     {
         $this->releaseLock();
+    }
+
+    /**
+     * @return resource
+     */
+    public function getLockHandle()
+    {
+        return $this->lockHandle;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLockMethod()
+    {
+        return $this->lockMethod;
     }
 
     /**
@@ -91,25 +143,29 @@ class FileLock
     }
 
     /**
+     * @param bool $blocking
+     *
      * @return $this
      */
-    public function setLock()
+    public function setLock($blocking = false)
     {
         if ($this->lockAcquired) {
             return $this;
         }
 
-        $mode             = is_file($this->lockFile) ? 'rb' : 'wb';
-        $this->lockHandle = fopen($this->lockFile, $mode) ?: null;
-        if ($mode == 'wb') {
-            if (!$this->lockHandle) {
-                // in case another process won the race
-                $mode             = 'rb';
-                $this->lockHandle = fopen($this->lockFile, $mode) ?: null;
-            }
+        $this->lockMode   = $this->lockMode ?: (is_file($this->lockFile) ? 'rb' : 'wb');
+        $this->lockHandle = fopen($this->lockFile, $this->lockMode) ?: null;
+        if (
+            $this->lockMethod === self::LOCK_EXTERNAL &&
+            $this->lockMode === 'wb' &&
+            $this->lockHandle === false
+        ) {
+            // if another process won the race at creating lock file
+            $this->lockMode   = 'rb';
+            $this->lockHandle = fopen($this->lockFile, $this->lockMode) ?: null;
         }
 
-        $this->lockAcquired = $this->lockHandle ? flock($this->lockHandle, LOCK_EX | LOCK_NB) : false;
+        $this->lockAcquired = $this->lockHandle ? flock($this->lockHandle, $blocking ? LOCK_EX : LOCK_EX | LOCK_NB) : false;
 
         return $this;
     }
