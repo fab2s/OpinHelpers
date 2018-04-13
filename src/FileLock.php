@@ -66,9 +66,9 @@ class FileLock
     /**
      * FileLock constructor.
      *
-     * @param string|resource $file
-     * @param string          $lockMethod
-     * @param string          $mode
+     * @param string $file
+     * @param string $lockMethod
+     * @param string $mode
      */
     public function __construct($file, $lockMethod, $mode = 'wb')
     {
@@ -158,7 +158,7 @@ class FileLock
         if (
             $this->lockMethod === self::LOCK_EXTERNAL &&
             $this->lockMode === 'wb' &&
-            $this->lockHandle === false
+            !$this->lockHandle
         ) {
             // if another process won the race at creating lock file
             $this->lockMode   = 'rb';
