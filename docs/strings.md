@@ -24,7 +24,7 @@ Signature | Description
 `softEscape(string $string, int $flag = ENT_COMPAT):string` | Shortcut for `escape(string $string, $flag, true)`
 `unEscape(string $string, int $quoteStyle = ENT_COMPAT):string` | [htmlspecialchars_decode()](https://php.net/htmlspecialchars_decode) wrapper 
 `convert(string $string, string $from = null, string $to = self::ENCODING):string` | Convert encoding to UTF8 by default. Basic $from encoding detection using `Strings::detectEncoding()`
-`detectEncoding(string $string):string|null` | Detect encoding by checking `Utf8::isUf8()`, then trying with BOMs and ultimately fall back to [mb_detect_encoding()](https://php.net/mb_detect_encoding) with limited charsets first, then more internally in [mb_convert_encoding()](https://php.net/mb_convert_encoding) 
+`detectEncoding(string $string):string/null` | Detect encoding by checking `Utf8::isUf8()`, then trying with BOMs and ultimately fall back to [mb_detect_encoding()](https://php.net/mb_detect_encoding) with limited charsets first, then more internally in [mb_convert_encoding()](https://php.net/mb_convert_encoding) 
 `secureCompare(string $test, string $reference):bool` | Perform a [Timing Attack](https://en.wikipedia.org/wiki/Timing_attack) safe string comparison (Truly constant operations comparison)
 `contentHash(string $content):string` | Return a `sha256` hash of the $content prefixed with $content length. Indented to quickly and reliably detect $content updates.
 

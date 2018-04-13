@@ -10,15 +10,15 @@ A purely static UTF8 Helper based on [mb_string](https://php.net/mb_string) and 
 
 Signature | Description
 ------------ | -------------
-`strrpos(string string $str, string $needle, int $offset = null):int|false` | UTF8 aware [strrpos()](https://php.net/strrpos) replacement
-`strpos(string $str, string $needle, int $offset = 0):int|false` | UTF8 aware [strpos()](https://php.net/strpos) replacement
+`strrpos(string string $str, string $needle, int $offset = null):int/false` | UTF8 aware [strrpos()](https://php.net/strrpos) replacement
+`strpos(string $str, string $needle, int $offset = 0):int/false` | UTF8 aware [strpos()](https://php.net/strpos) replacement
 `strtolower(string $str):string` | UTF8 aware [strtolower()](https://php.net/strtolower) replacement
 `strtoupper(string $str):string` | UTF8 aware [strtoupper()](https://php.net/strtoupper) replacement
 `substr(string $str, int $offset, int $length = null):string` | UTF8 aware [substr()](https://php.net/substr) replacement
 `strlen(string $str):int` | UTF8 aware [strlen()](https://php.net/strlen) replacement
 `ucfirst(string $str):string` | UTF8 aware [ucfirst()](https://php.net/ucfirst) replacement
 `ucwords(string $str):string` | UTF8 aware [ucwords()](https://php.net/ucwords) replacement
-`ord(string $chr):int|null` | UTF8 aware [ord()](https://php.net/ord) replacement
+`ord(string $chr):int/null` | UTF8 aware [ord()](https://php.net/ord) replacement
 `chr(int $num):string` | UTF8 aware [chr()](https://php.net/chr) replacement
 `normalize(string $string, int $canonicalForm = Normalizer::NFC):string` | UTF8 [ext-intl](https://php.net/intl) [Normalizer](https://php.net/normalizer.normalize)
 `hasUtf8(string $string):bool` | Tells if the input string contains some UTF8
