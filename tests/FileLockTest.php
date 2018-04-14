@@ -33,24 +33,34 @@ class FileLockTest extends \PHPUnit_Framework_TestCase
         $lock = (new FileLock($tmpFile, $lockMethod))->$lockCall();
         /* @var FileLock $lock */
         $this->assertTrue($lock->isLocked());
-
-        if ($lockMethod === FileLock::LOCK_EXTERNAL) {
-            $this->assertTrue(file_exists($tmpFile . '.lock'));
-        } else {
-            $this->assertFalse(file_exists($tmpFile . '.lock'));
-        }
+        $this->assertTrue(is_resource($lock->getHandle()));
 
         // same process I know
+        $opened    = FileLock::open($tmpFile, 'wb');
         $otherLock = (new FileLock($tmpFile, $lockMethod))->$lockCall();
         /* @var FileLock $otherLock */
         $this->assertFalse($otherLock->isLocked());
+        if ($lockMethod === FileLock::LOCK_EXTERNAL) {
+            $this->assertTrue(file_exists($tmpFile . '.lock'));
+            // since it is external, we can also lock Self
+            $this->assertTrue($opened instanceof FileLock);
+            $this->assertTrue(is_resource($opened->getHandle()));
+            $this->assertFalse($opened->unLock()->isLocked());
+        } else {
+            $this->assertFalse(file_exists($tmpFile . '.lock'));
+            $this->assertFalse($opened);
+        }
 
-        $lock->releaseLock();
+        $this->assertFalse(is_resource($otherLock->getHandle()));
+        $lock->unLock();
+        $this->assertFalse(is_resource($lock->getHandle()));
         $this->assertFalse($lock->isLocked());
         $this->assertTrue($otherLock->$lockCall()->isLocked());
+        $this->assertTrue(is_resource($otherLock->getHandle()));
 
         $otherLock->__destruct();
         $this->assertFalse($otherLock->isLocked());
+        $this->assertFalse(is_resource($otherLock->getHandle()));
     }
 
     /**
@@ -61,7 +71,7 @@ class FileLockTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 FileLock::LOCK_SELF,
-                'setLock',
+                'doLock',
             ],
             [
                 FileLock::LOCK_SELF,
@@ -69,7 +79,7 @@ class FileLockTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 FileLock::LOCK_EXTERNAL,
-                'setLock',
+                'doLock',
             ],
             [
                 FileLock::LOCK_EXTERNAL,

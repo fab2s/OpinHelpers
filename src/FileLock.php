@@ -27,14 +27,14 @@ class FileLock
     /**
      * @var string
      */
-    protected $lockMethod = self::LOCK_EXTERNAL;
+    protected $lockType = self::LOCK_EXTERNAL;
 
     /**
      * max number of lock attempt
      *
      * @var int
      */
-    protected $maxTry = 3;
+    protected $lockTry = 3;
 
     /**
      * The number of seconds to wait between lock attempts
@@ -46,17 +46,17 @@ class FileLock
     /**
      * @var string
      */
-    protected $lockFile;
+    protected $file;
 
     /**
      * @var resource
      */
-    protected $lockHandle;
+    protected $handle;
 
     /**
      * @var string fopen mode
      */
-    protected $lockMode;
+    protected $mode;
 
     /**
      * @var bool
@@ -78,15 +78,15 @@ class FileLock
         }
 
         if ($lockMethod === self::LOCK_SELF) {
-            $this->lockMethod = self::LOCK_SELF;
-            $this->lockMode   = $mode;
-            $this->lockFile   = $fileDir . '/' . basename($file);
+            $this->lockType = self::LOCK_SELF;
+            $this->mode     = $mode;
+            $this->file     = $fileDir . '/' . basename($file);
 
             return;
         }
 
-        $fileDir        = is_writeable($fileDir) ? $fileDir . '/' : sys_get_temp_dir() . '/' . sha1($fileDir) . '_';
-        $this->lockFile = $fileDir . basename($file) . '.lock';
+        $fileDir    = is_writeable($fileDir) ? $fileDir . '/' : sys_get_temp_dir() . '/' . sha1($fileDir) . '_';
+        $this->file = $fileDir . basename($file) . '.lock';
     }
 
     /**
@@ -94,23 +94,57 @@ class FileLock
      */
     public function __destruct()
     {
-        $this->releaseLock();
+        $this->unLock();
+    }
+
+    /**
+     * @param string $file
+     * @param string $mode
+     * @param null   $maxTries 0|null for single non blocking attempt
+     *                         1 for a single blocking attempt
+     *                         1-N Number of non blocking attempts
+     * @param null   $lockWait
+     *
+     * @return bool|static
+     */
+    public static function open($file, $mode, $maxTries = null, $lockWait = null)
+    {
+        $instance = new static($file, self::LOCK_SELF, $mode);
+        $maxTries = max(0, (int) $maxTries);
+        if ($maxTries > 1) {
+            $instance->setLockTry($maxTries);
+            $lockWait = max(0, (float) $lockWait);
+            if ($lockWait > 0) {
+                $instance->setLockWait($lockWait);
+            }
+            $instance->obtainLock();
+        } else {
+            $instance->doLock((bool) $maxTries);
+        }
+
+        if ($instance->isLocked()) {
+            return $instance;
+        }
+
+        $instance->unLock();
+
+        return false;
     }
 
     /**
      * @return resource
      */
-    public function getLockHandle()
+    public function getHandle()
     {
-        return $this->lockHandle;
+        return $this->handle;
     }
 
     /**
      * @return string
      */
-    public function getLockMethod()
+    public function getLockType()
     {
-        return $this->lockMethod;
+        return $this->lockType;
     }
 
     /**
@@ -131,13 +165,13 @@ class FileLock
         $tries = 0;
         $uWait = (int) ($this->lockWait * 1000000);
         do {
-            if ($this->setLock()->isLocked()) {
+            if ($this->doLock()->isLocked()) {
                 return $this;
             }
 
             ++$tries;
             usleep($uWait);
-        } while ($tries < $this->maxTry);
+        } while ($tries < $this->lockTry);
 
         return $this;
     }
@@ -147,25 +181,29 @@ class FileLock
      *
      * @return $this
      */
-    public function setLock($blocking = false)
+    public function doLock($blocking = false)
     {
         if ($this->lockAcquired) {
             return $this;
         }
 
-        $this->lockMode   = $this->lockMode ?: (is_file($this->lockFile) ? 'rb' : 'wb');
-        $this->lockHandle = fopen($this->lockFile, $this->lockMode) ?: null;
+        $this->mode   = $this->mode ?: (is_file($this->file) ? 'rb' : 'wb');
+        $this->handle = fopen($this->file, $this->mode) ?: null;
         if (
-            $this->lockMethod === self::LOCK_EXTERNAL &&
-            $this->lockMode === 'wb' &&
-            !$this->lockHandle
+            $this->lockType === self::LOCK_EXTERNAL &&
+            $this->mode === 'wb' &&
+            !$this->handle
         ) {
             // if another process won the race at creating lock file
-            $this->lockMode   = 'rb';
-            $this->lockHandle = fopen($this->lockFile, $this->lockMode) ?: null;
+            $this->mode   = 'rb';
+            $this->handle = fopen($this->file, $this->mode) ?: null;
         }
 
-        $this->lockAcquired = $this->lockHandle ? flock($this->lockHandle, $blocking ? LOCK_EX : LOCK_EX | LOCK_NB) : false;
+        $this->lockAcquired = $this->handle ? flock($this->handle, $blocking ? LOCK_EX : LOCK_EX | LOCK_NB) : false;
+
+        if (!$this->lockAcquired) {
+            $this->unLock();
+        }
 
         return $this;
     }
@@ -173,16 +211,16 @@ class FileLock
     /**
      * release the lock
      */
-    public function releaseLock()
+    public function unLock()
     {
-        if (is_resource($this->lockHandle)) {
-            fflush($this->lockHandle);
-            flock($this->lockHandle, LOCK_UN);
-            fclose($this->lockHandle);
+        if (is_resource($this->handle)) {
+            fflush($this->handle);
+            flock($this->handle, LOCK_UN);
+            fclose($this->handle);
         }
 
         $this->lockAcquired = false;
-        $this->lockHandle   = null;
+        $this->handle       = null;
 
         return $this;
     }
@@ -192,9 +230,9 @@ class FileLock
      *
      * @return $this
      */
-    public function setMaxTry($number)
+    public function setLockTry($number)
     {
-        $this->maxTry = max(1, (int) $number);
+        $this->lockTry = max(1, (int) $number);
 
         return $this;
     }
