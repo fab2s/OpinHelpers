@@ -98,12 +98,12 @@ class FileLock
     }
 
     /**
-     * @param string $file
-     * @param string $mode
-     * @param null   $maxTries 0|null for single non blocking attempt
-     *                         1 for a single blocking attempt
-     *                         1-N Number of non blocking attempts
-     * @param null   $lockWait
+     * @param string     $file
+     * @param string     $mode
+     * @param int|null   $maxTries 0|null for single non blocking attempt
+     *                             1 for a single blocking attempt
+     *                             1-N Number of non blocking attempts
+     * @param float|null $lockWait
      *
      * @return bool|static
      */
