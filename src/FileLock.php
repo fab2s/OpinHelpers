@@ -99,7 +99,7 @@ class FileLock
 
     /**
      * @param string     $file
-     * @param string     $mode fopen() mode
+     * @param string     $mode     fopen() mode
      * @param int|null   $maxTries 0|null for single non blocking attempt
      *                             1 for a single blocking attempt
      *                             1-N Number of non blocking attempts
@@ -162,15 +162,15 @@ class FileLock
      */
     public function obtainLock()
     {
-        $tries = 0;
-        $uWait = (int) ($this->lockWait * 1000000);
+        $tries       = 0;
+        $waitClosure = $this->getWaitClosuure();
         do {
             if ($this->doLock()->isLocked()) {
                 return $this;
             }
 
             ++$tries;
-            usleep($uWait);
+            $waitClosure();
         } while ($tries < $this->lockTry);
 
         return $this;
@@ -247,5 +247,25 @@ class FileLock
         $this->lockWait = max(0.0001, $float);
 
         return $this;
+    }
+
+    /**
+     * @return \Closure
+     */
+    protected function getWaitClosuure()
+    {
+        if ($this->lockWait > 300) {
+            $wait = (int) $this->lockWait;
+
+            return function () use ($wait) {
+                sleep($wait);
+            };
+        }
+
+        $wait = (int) ($this->lockWait * 1000000);
+
+        return function () use ($wait) {
+            usleep($wait);
+        };
     }
 }
