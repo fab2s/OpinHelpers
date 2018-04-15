@@ -90,7 +90,7 @@ FileLock comes with an handy factory to ease exclusive file opening:
 ```php
     /**
      * @param string     $file
-     * @param string     $mode
+     * @param string     $mode fopen() mode
      * @param int|null   $maxTries 0|null for single non blocking attempt
      *                             1 for a single blocking attempt
      *                             1-N Number of non blocking attempts
