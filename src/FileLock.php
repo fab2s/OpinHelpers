@@ -103,7 +103,7 @@ class FileLock
      * @param int|null   $maxTries 0|null for single non blocking attempt
      *                             1 for a single blocking attempt
      *                             1-N Number of non blocking attempts
-     * @param float|null $lockWait
+     * @param float|null $lockWait Time to wait between attempts in second
      *
      * @return bool|static
      */
@@ -244,7 +244,7 @@ class FileLock
      */
     public function setLockWait($float)
     {
-        $this->lockWait = max(0.001, $float);
+        $this->lockWait = max(0.0001, $float);
 
         return $this;
     }

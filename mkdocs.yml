@@ -5,3 +5,4 @@ pages:
     - 'Utf8': 'utf8.md'
     - 'strings': 'strings.md'
     - 'Bom': 'bom.md'
+    - 'FileLock': 'filelock.md'

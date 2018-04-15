@@ -20,6 +20,7 @@ composer require "fab2s/opinhelpers"
 - [Utf8](docs/utf8.md): Purely static UTF8 Helper
 - [Strings](docs/strings.md): Purely static String Helper to handle more advanced utf8 string manipulations
 - [Bom](docs/bom.md): Purely static zero dependencies BOM Helper to handle unicode BOMs
+- [FileLock](docs/filelock.md): fluent file locking _helper_
 
 ## Requirements
 
