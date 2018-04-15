@@ -20,7 +20,7 @@ If the `$lockFilePath = "$inputFilePath.lock";`  version of the `.lock` file (th
 
 ```php
 $filePath = "/some/dir/some.file.ext";
-$lock = new FileLock($filePath, Filelock::EXTERNAL_LOCK); // will create /some/dir/some/file.ext.lock or /tmp/sha1(/some/dir/some)_file.ext.lock
+$lock = new FileLock($filePath, Filelock::LOCK_EXTERNAL); // will create /some/dir/some/file.ext.lock or /tmp/sha1(/some/dir/some)_file.ext.lock
 ```
 
 ## Self Locking
@@ -29,7 +29,7 @@ This locking strategy does acquire a lock on the input filePath itself. It provi
 
 ```php
 $filePath = "/some/dir/some.file.ext";
-$lock = new FileLock($filePath, Filelock::SELF_LOCK); // will directtly flock() /some/dir/some/file.ext
+$lock = new FileLock($filePath, Filelock::LOCK_SELF); // will directtly flock() /some/dir/some/file.ext
 ```
 
 It _could_ make sense under specific circumstances to use a double lock, both External and Self, using two FileLock instances.
@@ -85,7 +85,7 @@ It is IMPORTANT to notice that when you acquire an Self lock, you need to keep t
 
 ## Open Factory
 
-FileLock comes with an handy factory to ease exclusive file opening:
+FileLock comes with an handy factory to ease exclusively and self locked file opening:
 
 ```php
     /**

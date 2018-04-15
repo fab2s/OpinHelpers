@@ -69,6 +69,8 @@ class FileLock
      * @param string $file
      * @param string $lockMethod
      * @param string $mode
+     *
+     * @throws \InvalidArgumentException
      */
     public function __construct($file, $lockMethod, $mode = 'wb')
     {

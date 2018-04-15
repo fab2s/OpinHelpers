@@ -155,7 +155,7 @@ class Math extends MathOpsAbstract
     public function toBase($base)
     {
         if ($this->normalize()->hasDecimals()) {
-            throw new \InvalidArgumentException('Argument number is not an integer in ' . __METHOD__);
+            throw new \InvalidArgumentException('Argument number is not an integer');
         }
 
         // do not mutate, only support positive integers
