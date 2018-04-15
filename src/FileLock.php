@@ -165,7 +165,7 @@ class FileLock
     public function obtainLock()
     {
         $tries       = 0;
-        $waitClosure = $this->getWaitClosuure();
+        $waitClosure = $this->getWaitClosure();
         do {
             if ($this->doLock()->isLocked()) {
                 return $this;
@@ -254,7 +254,7 @@ class FileLock
     /**
      * @return \Closure
      */
-    protected function getWaitClosuure()
+    protected function getWaitClosure()
     {
         if ($this->lockWait > 300) {
             $wait = (int) $this->lockWait;
