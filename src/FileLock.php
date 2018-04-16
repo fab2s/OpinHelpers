@@ -259,14 +259,14 @@ class FileLock
         if ($this->lockWait > 300) {
             $wait = (int) $this->lockWait;
 
-            return function() use ($wait) {
+            return function () use ($wait) {
                 sleep($wait);
             };
         }
 
         $wait = (int) ($this->lockWait * 1000000);
 
-        return function() use ($wait) {
+        return function () use ($wait) {
             usleep($wait);
         };
     }

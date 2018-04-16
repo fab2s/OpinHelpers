@@ -1,6 +1,6 @@
 # OpinHelpers
 
-[![Build Status](https://travis-ci.org/fab2s/OpinHelpers.svg?branch=master)](https://travis-ci.org/fab2s/OpinHelpers) [![Latest Stable Version](https://poser.pugx.org/fab2s/opinhelpers/v/stable)](https://packagist.org/packages/fab2s/opinhelpers) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/fab2s/OpinHelpers/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/fab2s/OpinHelpers/?branch=master) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com) [![License](https://poser.pugx.org/fab2s/opinhelpers/license)](https://packagist.org/packages/fab2s/opinhelpers)
+[![Documentation Status](https://readthedocs.org/projects/opinhelpers/badge/?version=latest)](http://opinhelpers.readthedocs.io/en/latest/?badge=latest) [![Build Status](https://travis-ci.org/fab2s/OpinHelpers.svg?branch=master)](https://travis-ci.org/fab2s/OpinHelpers) [![Latest Stable Version](https://poser.pugx.org/fab2s/opinhelpers/v/stable)](https://packagist.org/packages/fab2s/opinhelpers) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/fab2s/OpinHelpers/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/fab2s/OpinHelpers/?branch=master) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com) [![License](https://poser.pugx.org/fab2s/opinhelpers/license)](https://packagist.org/packages/fab2s/opinhelpers)
 
 OpinHelpers is a bellow "Swiss Army Knife" level set of opinionated Helper libs (hence the [opin[h]el](https://en.wikipedia.org/wiki/Opinel_knife)^^) covering some of the most annoying aspects of php programing, such as UTF8 string manipulation, arbitrary precision Mathematics or properly locking a file.
 
@@ -14,7 +14,9 @@ OpinHelpers can be installed using composer :
 composer require "fab2s/opinhelpers"
 ```
 
-## Citizens
+## Documentation
+
+[![Documentation Status](https://readthedocs.org/projects/opinhelpers/badge/?version=latest)](http://opinhelpers.readthedocs.io/en/latest/?badge=latest) Documentation can be found at [ReadTheDocs](http://opinhelpers.readthedocs.io/en/latest/?badge=latest)
 
 - [Math](docs/math.md): Arbitrary precision fluent helper with a rather strict approach
 - [Utf8](docs/utf8.md): Purely static UTF8 Helper
