@@ -47,7 +47,7 @@ $number = Math::number('42')
 $result = (string) $number->format(2); // '42.00'
 $result = (string) $number; '42';
 // and you can continue calculating after string cast
-$result = (string) $number->add('1295')->toBase(62); 'LZ';
+$result = (string) $number->add('1295')->toBase(62); // 'LZ'
 
 // toBase does not mutate base 10 internal representation
 $result = (string) $number; '1337';
