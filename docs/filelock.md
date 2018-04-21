@@ -113,4 +113,3 @@ if ($fileLock) {
 	$handle = $fileLock->getHandle();
 }
 ```
-
