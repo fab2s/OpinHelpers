@@ -20,7 +20,7 @@ Signature | Description
 `ucwords(string $str):string` | UTF8 aware [ucwords()](https://php.net/ucwords) replacement
 `ord(string $chr):int/null` | UTF8 aware [ord()](https://php.net/ord) replacement
 `chr(int $num):string` | UTF8 aware [chr()](https://php.net/chr) replacement
-`normalize(string $string, int $canonicalForm = Normalizer::NFC):string` | UTF8 [ext-intl](https://php.net/intl) [Normalizer](https://php.net/normalizer.normalize)
+`normalize(string $string, int $canonicalForm = self::NORMALIZE_NFC):string` | UTF8 [ext-intl](https://php.net/intl) [Normalizer](https://php.net/normalizer.normalize)
 `hasUtf8(string $string):bool` | Tells if the input string contains some UTF8
 `isUtf8(string $string):bool` | Tells if the input string is valid UTF8
 `replaceMb4(string $string, string $replace = ''):string` | Replaces all [Utf8Mb4](https://stackoverflow.com/a/30074553/7630496) characters (aka mostly [emoji](https://en.wikipedia.org/wiki/Emoji))

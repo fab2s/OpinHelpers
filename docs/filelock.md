@@ -25,7 +25,7 @@ $lock = new FileLock($filePath, Filelock::LOCK_EXTERNAL); // will create /some/d
 
 ## Self Locking
 
-This locking strategy does acquire a lock on the input filePath itself. It provide with more guarantees than the External Locking strategy as the file will be locked for any process, not just the ones checking the lock through FileLock and it proffered when write sessions are not instant.
+This locking strategy does acquire a lock on the input filePath itself. It provide with more guarantees than the External Locking strategy as the file will be locked for any process, not just the ones checking the lock through FileLock and it preferred when write sessions are not _instant_.
 
 ```php
 $filePath = "/some/dir/some.file.ext";

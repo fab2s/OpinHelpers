@@ -20,7 +20,6 @@ Signature | Description
 `normalizeTitle(string $title):string` | Return `singleLineIze`'d and `normalizeText`'d $title
 `normalizeName(string $name):string` | Return `ucword`'d and `normalizeTitle`'d $name (`"john \n\t doe  "` -> `"John Doe"`) 
 `escape(string $string, int $flag = ENT_COMPAT, bool $hardEscape = true):string` | [htmlspecialchars()](https://php.net/htmlspecialchars) wrapper with UTF8 set as encoding
-`escape(string $string, int $flag = ENT_COMPAT, bool $hardEscape = true):string` | [htmlspecialchars()](https://php.net/htmlspecialchars) wrapper with UTF8 set as encoding
 `softEscape(string $string, int $flag = ENT_COMPAT):string` | Shortcut for `escape(string $string, $flag, true)`
 `unEscape(string $string, int $quoteStyle = ENT_COMPAT):string` | [htmlspecialchars_decode()](https://php.net/htmlspecialchars_decode) wrapper 
 `convert(string $string, string $from = null, string $to = self::ENCODING):string` | Convert encoding to UTF8 by default. Basic $from encoding detection using `Strings::detectEncoding()`

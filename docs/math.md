@@ -20,10 +20,10 @@ A `Math` instance is just initialized with a valid base 10 number. From there yo
 $number = new Math('42');
 
 // fluent grammar
-$result = (string) $number->add('1')->sub(2)->div(1)->add(1)->mul(-1); // '42'
+$result = (string) $number->add('1')->sub(2)->div(1)->add(1)->mul(-1); // '-42'
 
 // factory way: number
-$result = (string) Math::number('42')->add('1')->sub(2)->div('1')->add(1)->mul(-1); // '42'
+$result = (string) Math::number('42')->add('1')->sub(2)->div('1')->add(1)->mul(-1); // '-42'
 
 // factory way: fromBase
 $result = (string) Math::fromBase('LZ', 62); // '1337'
@@ -66,7 +66,7 @@ $result = Math::number('  42.0000 ')->getNumber(); // '42.0000'
 
 // at all time
 if ((string) $number1 === (string) $number2) {
-    // both instance number are equals
+    // both instance numbers are equals
 }
 
 // same as
@@ -78,25 +78,25 @@ if ($number1->eq($number2)) {
 You can transparently re-use partial $calculus directly as instance when calculating:
 
 ```php
-$number = (new Math('42'));
+$number = new Math('42');
 // same as
 $number = Math::number('42');
 
 // in constructor
-$result = (string) (new Math($number))->div('1337'); // '42'
+$result = (string) (new Math($number))->div('2'); // '21'
 // same as
-$result = (string) Math::number($number)->mul('1337'); // '42'
+$result = (string) Math::number($number)->div('2'); // '21'
 
 // in calc method
-$result = (string) Math::number('42')->add($number)->sub('42')->div('1337'); // '42'
+$result = (string) Math::number('42')->add($number)->sub('42')->div('2'); // '21'
 ```
 
 Doing so is actually faster than casting a pre-existing instance to string because it does not trigger a normalization (internal number state is only normalized when exporting result) nor a number validation, as internal $number is already valid at all times.
 
-Arguments should be string or `Math`, but it is ok to use integers up to `INT_(32|64)`. 
+Arguments should be string or `Math`, but it is _ok_ to use integers up to `INT_(32|64)`. 
 
-DO NOT use `floats` as casting them to `string` may result in local dependent format, such as using a coma instead of a dot for decimals. 
-The way floats are handled is also the reason why `bcmath` exists, so even if you trust your locale settings, using floats kinda defeats the purpose of using such lib.
+**DO NOT** use `floats` as casting them to `string` may result in local dependent format, such as using a coma instead of a dot for decimals. 
+The way floats are handled in general and by PHP in particular is the very the reason why `bcmath` exists, so even if you trust your locale settings, using floats still kinda defeats the purpose of using such lib.
 
 ## Internal precision
 
