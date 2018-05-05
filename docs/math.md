@@ -45,12 +45,12 @@ $number = Math::number('42')
 
 // formatting does not mutate internal number
 $result = (string) $number->format(2); // '42.00'
-$result = (string) $number; '42';
+$result = (string) $number; // '42';
 // and you can continue calculating after string cast
 $result = (string) $number->add('1295')->toBase(62); // 'LZ'
 
 // toBase does not mutate base 10 internal representation
-$result = (string) $number; '1337';
+$result = (string) $number; // '1337';
 ```
 
 The string form of any such calculus is normalized (things like '-0', '+.0' or '0.00' to '0'), which means that you can accurately compare `Math` instances results:
@@ -69,7 +69,7 @@ if ((string) $number1 === (string) $number2) {
     // both instance numbers are equals
 }
 
-// same as
+// same as (internally using bccomp)
 if ($number1->eq($number2)) {
     // both instance numbers are equals
 }
