@@ -90,7 +90,7 @@ class Strings
      */
     public static function singleLineIze($string)
     {
-        return preg_replace("`[ \t" . static::NON_STANDARD_WS_CLASS . "\R]{1,}`u", ' ', $string);
+        return preg_replace("`\R{1,}`u", ' ', $string);
     }
 
     /**
@@ -119,7 +119,7 @@ class Strings
         if (isset($maxConsecutive)) {
             // as regular ws should be the majority, put it first
             $extraWs = " $extraWs";
-            $length  = $maxConsecutive === 1 ? '{1,}' : '{' . $maxConsecutive . ',}';
+            $length  = '{' . $maxConsecutive . ',}';
             $replace = str_repeat($replace, $maxConsecutive);
         }
 
@@ -177,7 +177,7 @@ class Strings
      */
     public static function normalizeTitle($title)
     {
-        return static::singleLineIze(static::normalizeText($title));
+        return static::normalizeWs(static::singleLineIze(static::normalizeText($title)), true, 1);
     }
 
     /**

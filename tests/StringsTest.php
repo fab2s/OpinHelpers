@@ -19,8 +19,8 @@ class StringsTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider filterData
      *
-     * @param mixed $input
-     * @param mixed $expected
+     * @param string $input
+     * @param string $expected
      */
     public function testFilter($input, $expected)
     {
@@ -30,8 +30,8 @@ class StringsTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider singleWsIzeData
      *
-     * @param mixed $input
-     * @param mixed $expected
+     * @param string $input
+     * @param string $expected
      */
     public function testSingleWsIze($input, $expected)
     {
@@ -39,12 +39,23 @@ class StringsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @dataProvider singleLineIzeData
+     *
+     * @param string $input
+     * @param string $expected
+     */
+    public function testSingleLineIze($input, $expected)
+    {
+        $this->assertSame($expected, Strings::singleLineIze($input));
+    }
+
+    /**
      * @dataProvider normalizeWsData
      *
-     * @param mixed    $input
+     * @param string   $input
      * @param bool     $includeTabs
      * @param int|null $maxConsecutive
-     * @param mixed    $expected
+     * @param string   $expected
      */
     public function testNormalizeWs($input, $includeTabs, $maxConsecutive, $expected)
     {
@@ -54,14 +65,27 @@ class StringsTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider normalizeEolData
      *
-     * @param mixed    $input
+     * @param string   $input
      * @param int|null $maxConsecutive
      * @param string   $eol
-     * @param mixed    $expected
+     * @param string   $expected
      */
     public function testNormalizeEol($input, $maxConsecutive, $eol, $expected)
     {
         $this->assertSame($expected, Strings::normalizeEol($input, $maxConsecutive, $eol));
+    }
+
+    /**
+     * @return array
+     */
+    public function singleLineIzeData()
+    {
+        return [
+            [
+                'input'          => "this is\r\r\none text \n\f\nwith \n\n\n tons of ws \f\tand LF's \r\nevery" . json_decode('"\u000B"') . 'where',
+                'expected'       => "this is one text  with   tons of ws  \tand LF's  every where",
+            ],
+        ];
     }
 
     /**
