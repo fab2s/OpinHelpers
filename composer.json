@@ -6,7 +6,15 @@
         "name" : "Fabrice de Stefanis"
     }],
     "keywords" : [
-        "PHP simple helpers utf8 string math"
+        "PHP",
+        "Simple",
+        "Helpers",
+        "Utf8",
+        "String",
+        "Math",
+        "BOM",
+        "BcMath",
+        "FileLock"
     ],
     "license" : [
         "MIT"

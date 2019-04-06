@@ -26,7 +26,7 @@ composer require "fab2s/opinhelpers"
 
 ## Requirements
 
-OpinHelpers is tested against php 5.6, 7.0, 7.1, 7.2 and hhvm.
+OpinHelpers is tested against php 5.6, 7.0, 7.1, 7.2 and 7.3.
 
 ## Contributing
 
