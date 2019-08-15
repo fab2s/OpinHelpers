@@ -20,28 +20,24 @@
         "MIT"
     ],
     "require" : {
-        "php": ">=5.6"
+        "php": ">=7.1",
+        "fab2s/math": "1.0.*",
+        "fab2s/filelock": "@dev",
+        "fab2s/bom": "@dev",
+        "fab2s/utf8": "@dev",
+        "fab2s/strings": "@dev"
     },
     "require-dev": {
-      "phpunit/phpunit": "~5.0"
+      "phpunit/phpunit": "~7.0|~8.0"
     },
     "autoload": {
         "classmap": [
           "src"
-        ],
-        "psr-4": {
-            "fab2s\\OpinHelpers\\": "/"
-        }
+        ]
     },
     "autoload-dev": {
         "psr-4": {
             "fab2s\\Tests\\": "tests/"
         }
-    },
-    "suggest": {
-        "ext-bcmath": "To use Math class",
-        "ext-gmp": "For faster Math::baseConvert",
-        "ext-intl": "To use Utf8 Normalization",
-        "ext-mbstring": "To use Utf8 class"
     }
 }
