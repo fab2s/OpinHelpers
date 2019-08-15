@@ -41,7 +41,7 @@ use fab2s\OpinHelpers\Math;
 use fab2s\Math\Math;
 
 // old version will be marked as deprecated 
-$number = ~~fab2s\OpinHelpers\Math::numder~~('42');
+$number = fab2s\OpinHelpers\Math::numder('42');
 
 // new one is ok with full type hints
 $number = fab2s\Math\Math::numder('42');
