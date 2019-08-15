@@ -45,9 +45,9 @@ class Bom
     const ENC_UTF32_LE = 'UTF-32LE';
 
     /**
-     * UTF8 | UTF16_BE | UTF16_LE | UTF32_BE | UTF32_LE
+     * UTF8 | UTF16_BE | UTF32_LE | UTF16_LE | UTF32_BE
      */
-    const BOM_REGEX = '\xEF\xBB\xBF|\xFE\xFF|\xFF\xFE|\x00\x00\xFE\xFF|\xFF\xFE\x00\x00';
+    const BOM_REGEX = '\xEF\xBB\xBF|\xFE\xFF|\xFF\xFE\x00\x00|\xFF\xFE|\x00\x00\xFE\xFF';
 
     /**
      * @var string[]
@@ -109,5 +109,13 @@ class Bom
     public static function getEncodingBom($encoding)
     {
         return isset(static::$boms[$encoding]) ? static::$boms[$encoding] : null;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getBoms()
+    {
+        return static::$boms;
     }
 }
