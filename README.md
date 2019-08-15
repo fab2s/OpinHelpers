@@ -52,7 +52,7 @@ $number = fab2s\Math\Math::numder('42');
 
 ## Requirements
 
-OpinHelpers is tested against php 7.1, 7.2 and 7.3.
+`OpinHelpers` is tested against php 7.1, 7.2 and 7.3.
 
 ## Contributing
 
