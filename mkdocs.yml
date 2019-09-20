@@ -1,8 +1,0 @@
-site_name: 'OpinHelpers'
-pages:
-    - 'OpinHelpers Documentation': 'https://github.com/fab2s/OpinHelpers/blob/master/README.md'
-    - 'Math': 'https://github.com/fab2s/Math/blob/master/README.md'
-    - 'Utf8': 'https://github.com/fab2s/Utf8/blob/master/README.md'
-    - 'Strings': 'https://github.com/fab2s/Strings/blob/master/README.md'
-    - 'Bom': 'https://github.com/fab2s/Bom/blob/master/README.md'
-    - 'FileLock': 'https://github.com/fab2s/FileLock/blob/master/README.md'
