@@ -20,7 +20,7 @@
         "MIT"
     ],
     "require" : {
-        "php": ">=7.1",
+        "php": "^7.1|^8.0",
         "fab2s/math": "^1.0",
         "fab2s/filelock": "^1.0",
         "fab2s/strings": "^1.0"

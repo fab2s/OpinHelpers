@@ -1,6 +1,6 @@
 # OpinHelpers
 
-[![Build Status](https://travis-ci.org/fab2s/OpinHelpers.svg?branch=master)](https://travis-ci.org/fab2s/OpinHelpers) [![Total Downloads](https://poser.pugx.org/fab2s/opinhelpers/downloads)](https://packagist.org/packages/fab2s/opinhelpers) [![Monthly Downloads](https://poser.pugx.org/fab2s/opinhelpers/d/monthly)](https://packagist.org/packages/fab2s/opinhelpers) [![Latest Stable Version](https://poser.pugx.org/fab2s/opinhelpers/v/stable)](https://packagist.org/packages/fab2s/opinhelpers) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com) [![License](https://poser.pugx.org/fab2s/opinhelpers/license)](https://packagist.org/packages/fab2s/opinhelpers)
+[![Build Status](https://travis-ci.com/fab2s/OpinHelpers.svg?branch=master)](https://travis-ci.com/fab2s/OpinHelpers) [![Total Downloads](https://poser.pugx.org/fab2s/opinhelpers/downloads)](https://packagist.org/packages/fab2s/opinhelpers) [![Monthly Downloads](https://poser.pugx.org/fab2s/opinhelpers/d/monthly)](https://packagist.org/packages/fab2s/opinhelpers) [![Latest Stable Version](https://poser.pugx.org/fab2s/opinhelpers/v/stable)](https://packagist.org/packages/fab2s/opinhelpers) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com) [![License](https://poser.pugx.org/fab2s/opinhelpers/license)](https://packagist.org/packages/fab2s/opinhelpers)
 
 `OpinHelpers` is a bellow "Swiss Army Knife" level set of opinionated Helper libs (hence the [opin[h]el](https://en.wikipedia.org/wiki/Opinel_knife)^^) covering some of the most annoying aspects of php programing, such as UTF8 string manipulation, arbitrary precision Mathematics or properly locking a file.
 
@@ -14,13 +14,13 @@
 composer require "fab2s/opinhelpers"
 ```
 
-If you want to specifically install the php >=7.1.0 version, use:
+If you want to specifically install the php >=7.2.0 version, use:
 
 ```
 composer require "fab2s/opinhelpers" ^1
 ```
 
-If you want to specifically install the php 5.6/7.0 version, use:
+If you want to specifically install the php 5.6/7.1 version, use:
 
 ```
 composer require "fab2s/opinhelpers" ^0
@@ -34,7 +34,7 @@ There are mostly ([see Compatibility](#compatibility)) no changes other than fur
 
 - [Math](https://github.com/fab2s/Math): High precision base10 fluent helper with a rather strict approach
 - [Utf8](https://github.com/fab2s/Utf8): Purely static UTF8 Helper
-- [Strings](docs/https://github.com/fab2s/Strings): Purely static String Helper to handle more advanced utf8 string manipulations
+- [Strings](https://github.com/fab2s/Strings): Purely static String Helper to handle more advanced utf8 string manipulations
 - [Bom](https://github.com/fab2s/Bom): Purely static zero dependencies BOM Helper to handle unicode BOMs
 - [FileLock](https://github.com/fab2s/FileLock): fluent file locking _helper_
 
@@ -64,7 +64,7 @@ $number = fab2s\Math\Math::numder('42');
 
 ## Requirements
 
-`OpinHelpers` is tested against php 7.1, 7.2, 7.3 and 7.4
+`OpinHelpers` is tested against php 7.2, 7.3, 7.4 and 8.0
 
 ## Contributing
 
