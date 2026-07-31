@@ -1,6 +1,6 @@
 # OpinHelpers
 
-[![Build Status](https://travis-ci.com/fab2s/OpinHelpers.svg?branch=master)](https://travis-ci.com/fab2s/OpinHelpers) [![Total Downloads](https://poser.pugx.org/fab2s/opinhelpers/downloads)](https://packagist.org/packages/fab2s/opinhelpers) [![Monthly Downloads](https://poser.pugx.org/fab2s/opinhelpers/d/monthly)](https://packagist.org/packages/fab2s/opinhelpers) [![Latest Stable Version](https://poser.pugx.org/fab2s/opinhelpers/v/stable)](https://packagist.org/packages/fab2s/opinhelpers) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com) [![License](https://poser.pugx.org/fab2s/opinhelpers/license)](https://packagist.org/packages/fab2s/opinhelpers)
+[![CI](https://github.com/fab2s/OpinHelpers/actions/workflows/ci.yml/badge.svg)](https://github.com/fab2s/OpinHelpers/actions/workflows/ci.yml) [![QA](https://github.com/fab2s/OpinHelpers/actions/workflows/qa.yml/badge.svg)](https://github.com/fab2s/OpinHelpers/actions/workflows/qa.yml) [![Total Downloads](https://poser.pugx.org/fab2s/opinhelpers/downloads)](https://packagist.org/packages/fab2s/opinhelpers) [![Monthly Downloads](https://poser.pugx.org/fab2s/opinhelpers/d/monthly)](https://packagist.org/packages/fab2s/opinhelpers) [![Latest Stable Version](https://poser.pugx.org/fab2s/opinhelpers/v/stable)](https://packagist.org/packages/fab2s/opinhelpers) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com) [![License](https://poser.pugx.org/fab2s/opinhelpers/license)](https://packagist.org/packages/fab2s/opinhelpers)
 
 `OpinHelpers` is a bellow "Swiss Army Knife" level set of opinionated Helper libs (hence the [opin[h]el](https://en.wikipedia.org/wiki/Opinel_knife)^^) covering some of the most annoying aspects of php programing, such as UTF8 string manipulation, arbitrary precision Mathematics or properly locking a file.
 
@@ -64,7 +64,7 @@ $number = fab2s\Math\Math::numder('42');
 
 ## Requirements
 
-`OpinHelpers` is tested against php 7.2, 7.3, 7.4 and 8.0
+`OpinHelpers` is tested against php 8.2, 8.3, 8.4 and 8.5
 
 ## Contributing
 

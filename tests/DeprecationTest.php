@@ -7,21 +7,20 @@
  * find in the LICENSE file or at https://opensource.org/licenses/MIT
  */
 
-namespace fab2s\Tests;
+namespace fab2s\OpinHelpers\Tests;
+
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class DeprecationTest
  */
-class DeprecationTest extends \PHPUnit\Framework\TestCase
+class DeprecationTest extends TestCase
 {
     /**
-     * @dataProvider deprecationProvider
-     *
-     * @param string $class
-     * @param array  $methods
-     *
      * @throws \ReflectionException
      */
+    #[DataProvider('deprecationProvider')]
     public function testDeprecation(string $class, array $methods)
     {
         $this->assertTrue(class_exists($class), $class);
@@ -33,10 +32,7 @@ class DeprecationTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    /**
-     * @return array
-     */
-    public function deprecationProvider()
+    public static function deprecationProvider(): array
     {
         return [
             [
