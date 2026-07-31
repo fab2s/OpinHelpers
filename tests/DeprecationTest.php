@@ -9,8 +9,15 @@
 
 namespace fab2s\OpinHelpers\Tests;
 
+use fab2s\OpinHelpers\Bom;
+use fab2s\OpinHelpers\FileLock;
+use fab2s\OpinHelpers\Math;
+use fab2s\OpinHelpers\Strings;
+use fab2s\OpinHelpers\Utf8;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use ReflectionException;
 
 /**
  * Class DeprecationTest
@@ -18,14 +25,14 @@ use PHPUnit\Framework\TestCase;
 class DeprecationTest extends TestCase
 {
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     #[DataProvider('deprecationProvider')]
-    public function testDeprecation(string $class, array $methods)
+    public function test_deprecation(string $class, array $methods)
     {
         $this->assertTrue(class_exists($class), $class);
 
-        $reflexion = new \ReflectionClass($class);
+        $reflexion = new ReflectionClass($class);
 
         foreach ($methods as $method) {
             $this->assertSame($method, $reflexion->getMethod($method)->name);
@@ -36,7 +43,7 @@ class DeprecationTest extends TestCase
     {
         return [
             [
-                \fab2s\OpinHelpers\Math::class,
+                Math::class,
                 [
                     'number',
                     'fromBase',
@@ -52,7 +59,7 @@ class DeprecationTest extends TestCase
                 ],
             ],
             [
-                \fab2s\OpinHelpers\FileLock::class,
+                FileLock::class,
                 [
                     'open',
                     'getHandle',
@@ -68,7 +75,7 @@ class DeprecationTest extends TestCase
                 ],
             ],
             [
-                \fab2s\OpinHelpers\Bom::class,
+                Bom::class,
                 [
                     'extract',
                     'drop',
@@ -84,7 +91,7 @@ class DeprecationTest extends TestCase
                 ],
             ],
             [
-                \fab2s\OpinHelpers\Utf8::class,
+                Utf8::class,
                 [
                     'strrpos',
                     'normalize',
@@ -100,7 +107,7 @@ class DeprecationTest extends TestCase
                 ],
             ],
             [
-                \fab2s\OpinHelpers\Strings::class,
+                Strings::class,
                 [
                     'filter',
                     'normalizeWs',
