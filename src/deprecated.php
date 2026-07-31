@@ -8,46 +8,42 @@
  */
 
 namespace {
-    class_alias(\fab2s\Math\Math::class, \fab2s\OpinHelpers\Math::class);
-    class_alias(\fab2s\FileLock\FileLock::class, \fab2s\OpinHelpers\FileLock::class);
-    class_alias(\fab2s\Bom\Bom::class, \fab2s\OpinHelpers\Bom::class);
-    class_alias(\fab2s\Utf8\Utf8::class, \fab2s\OpinHelpers\Utf8::class);
-    class_alias(\fab2s\Strings\Strings::class, \fab2s\OpinHelpers\Strings::class);
+    use fab2s\Bom\Bom;
+    use fab2s\FileLock\FileLock;
+    use fab2s\Math\Math;
+    use fab2s\Strings\Strings;
+    use fab2s\Utf8\Utf8;
+
+    class_alias(Math::class, fab2s\OpinHelpers\Math::class);
+    class_alias(FileLock::class, fab2s\OpinHelpers\FileLock::class);
+    class_alias(Bom::class, fab2s\OpinHelpers\Bom::class);
+    class_alias(Utf8::class, fab2s\OpinHelpers\Utf8::class);
+    class_alias(Strings::class, fab2s\OpinHelpers\Strings::class);
 }
 
 namespace fab2s\OpinHelpers {
-    if (!class_exists(Math::class)) {
+    if (! class_exists(Math::class)) {
         /** @deprecated Math this is intended to help IDEs */
-        class Math
-        {
-        }
+        class Math {}
     }
 
-    if (!class_exists(FileLock::class)) {
+    if (! class_exists(FileLock::class)) {
         /** @deprecated FileLock this is intended to help IDEs */
-        class FileLock
-        {
-        }
+        class FileLock {}
     }
 
-    if (!class_exists(Bom::class)) {
+    if (! class_exists(Bom::class)) {
         /** @deprecated Bom this is intended to help IDEs */
-        class Bom
-        {
-        }
+        class Bom {}
     }
 
-    if (!class_exists(Utf8::class)) {
+    if (! class_exists(Utf8::class)) {
         /** @deprecated Utf8 this is intended to help IDEs */
-        class Utf8
-        {
-        }
+        class Utf8 {}
     }
 
-    if (!class_exists(Strings::class)) {
+    if (! class_exists(Strings::class)) {
         /** @deprecated Strings this is intended to help IDEs */
-        class Strings
-        {
-        }
+        class Strings {}
     }
 }
